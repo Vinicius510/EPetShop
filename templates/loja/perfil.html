@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Perfil - {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="user-profile">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <div class="user-name">
+                            <i class="fas fa-user-circle"></i> {{ user.get_full_name|default:user.username }}
+                        </div>
+                        <p style="color: #666; margin-bottom: 0;">
+                            <strong>Email:</strong> {{ user.email }}
+                        </p>
+                        <p style="color: #666; margin-bottom: 0;">
+                            <strong>Membro desde:</strong> {{ user.date_joined|date:"d/m/Y" }}
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <a href="{% url 'loja:index' %}" class="btn btn-secondary">
+                            <i class="fas fa-shopping-bag"></i> Continuar Comprando
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="color: var(--primary-color); font-weight: bold; margin: 2rem 0 1rem 0;">
+                <i class="fas fa-history"></i> Meus Pedidos
+            </h2>
+
+            {% if pedidos %}
+                <div class="orders-table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-hashtag"></i> Pedido</th>
+                                <th><i class="fas fa-box"></i> Produto</th>
+                                <th><i class="fas fa-cubes"></i> Quantidade</th>
+                                <th><i class="fas fa-dollar-sign"></i> Total</th>
+                                <th><i class="fas fa-calendar"></i> Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pedido in pedidos %}
+                                <tr>
+                                    <td>#{{ pedido.id }}</td>
+                                    <td>{{ pedido.produto.nome }}</td>
+                                    <td>{{ pedido.quantidade }}</td>
+                                    <td>R$ {{ pedido.total|floatformat:2 }}</td>
+                                    <td>{{ pedido.data|date:"d/m/Y H:i" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-top: 1.5rem;">
+                    <p style="margin: 0; color: #666;">
+                        <strong>Total de Pedidos:</strong> {{ pedidos|length }}
+                    </p>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--primary-color); font-size: 1.2rem; font-weight: bold;">
+                        <strong>Valor Total Gasto:</strong> R$ <span id="total-gasto">0.00</span>
+                    </p>
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle"></i> Você ainda não realizou nenhum pedido.
+                    <br>
+                    <a href="{% url 'loja:index' %}" class="btn btn-primary btn-sm mt-2">
+                        <i class="fas fa-shopping-bag"></i> Começar a Comprar
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Calcular total gasto
+    const pedidos = [
+        {% for pedido in pedidos %}
+            {{ pedido.total|safe }},
+        {% endfor %}
+    ];
+
+    const totalGasto = pedidos.reduce((acc, val) => acc + parseFloat(val), 0).toFixed(2);
+    document.getElementById('total-gasto').textContent = totalGasto;
+</script>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastro - Pet Shop{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); margin: 2rem 0;">
+                <h1 style="color: var(--primary-color); text-align: center; margin-bottom: 2rem;">
+                    <i class="fas fa-user-plus"></i> Cadastro
+                </h1>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.username.id_for_label }}" class="form-label">
+                            <i class="fas fa-user"></i> Nome de Usuário
+                        </label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <div class="error-message">
+                                {% for error in form.username.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">
+                            <i class="fas fa-envelope"></i> Email
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="error-message">
+                                {% for error in form.email.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                            <i class="fas fa-id-card"></i> Nome
+                        </label>
+                        {{ form.first_name }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                            <i class="fas fa-id-card"></i> Sobrenome
+                        </label>
+                        {{ form.last_name }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.password1.id_for_label }}" class="form-label">
+                            <i class="fas fa-lock"></i> Senha
+                        </label>
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <div class="error-message">
+                                {% for error in form.password1.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <small class="text-muted d-block mt-2">
+                            <i class="fas fa-info-circle"></i>
+                            Sua senha deve conter pelo menos 8 caracteres e não pode ser totalmente numérica.
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.password2.id_for_label }}" class="form-label">
+                            <i class="fas fa-lock"></i> Confirmar Senha
+                        </label>
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <div class="error-message">
+                                {% for error in form.password2.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                        <i class="fas fa-check"></i> Cadastrar
+                    </button>
+                </form>
+
+                <p style="text-align: center; color: #666;">
+                    Já possui conta? <a href="{% url 'loja:login' %}" style="color: var(--primary-color); text-decoration: none; font-weight: bold;">Faça login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
